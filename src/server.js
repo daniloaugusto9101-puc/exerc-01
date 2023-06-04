@@ -23,6 +23,7 @@ const crud = {
         let db = crud.getAll();
         const objeto = db.find(obj => obj.id == id);
         if (objeto) {
+            objeto.id = corpo.id
             objeto.descricao = corpo.descricao
             objeto.valor = corpo.valor
             objeto.marca = corpo.marca
