@@ -24,6 +24,8 @@ const crud = {
         const objeto = db.find(obj => obj.id == id);
         if (objeto) {
             objeto.descricao = corpo.descricao
+            objeto.valor = corpo.valor
+            objeto.marca = corpo.marca
         }
         fs.writeFileSync('./src/db.json', JSON.stringify(db), { encoding: 'utf-8' })
     },
