@@ -2,28 +2,29 @@
 const express = require('express') //Framework rotas e servidor
 const app = express()
 const morgan = require('morgan') // para criação de logs
-const routerAPI = require('./routes/router') // arquivos de rotas
 require('dotenv').config() //da acesso as variaveis de ambiente dentro do aruqivo .env
+
 
 // variaveis da API
 const PORT = process.env.PORT || 3333 //recupera porta do arquivo .env 
-const endPoint = '/api' // define a variavel padrao do endPoint
-
 
 app.use(express.json()) //aceita corpo json
 app.use(morgan('common')) //criar log da API
-app.use(endPoint, routerAPI)
+
+// Dados de acesso apiV1
+const endPoint1 = '/api/v1' // define a variavel padrao do endPoint
+const routerAPI1 = require('./routes/routerAPI1') // arquivos de rotas V1
+app.use(endPoint1, routerAPI1)
+
+// Dados de acesso apiV2
+const endPoint2 = '/api/v2' // define a variavel padrao do endPoint
+const routerAPI2 = require('./routes/routerAPI2') // arquivos de rotas V1
+app.use(endPoint2, routerAPI2)
 
 app.use('/', (req, res) => {
     res.status(200)
-    res.send(`Bem vindo a minha API, acesse: \n /api/produtos`)
+    res.send(`Bem vindo a minha API, acesse: \n ${endPoint2}/produtos`)
 })
-
-// app.use((req, res) => {
-//     res.status(404)
-//     res.send(`Desculpe! Recurso solicitado não existe acesse \n /api/produtos`)
-// })
-
 
 // Inicializa o servidor
 app.listen(PORT, () => console.log(`Servidor rodando com sucesso na porta: ${PORT}`))
