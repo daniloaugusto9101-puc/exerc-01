@@ -18,7 +18,8 @@ routerAPI2.get(`/produtos`, (req, res) => {
     knex('produtos')
         .then((dados) => {
             res.json(dados)
-        }).catch((err) => {
+        })
+        .catch((err) => {
             res.json({ message: `Erro ao obter produtos: ${err.message}` })
         })
 })
@@ -29,12 +30,21 @@ routerAPI2.get(`/produtos/:id`, (req, res) => {
 })
 
 routerAPI2.post(`/produtos`, (req, res) => {
-    req.body.id = produtos.length + 1
-    produtos.push(req.body)
-    res.send(201)
-        .json({
-            messagem: "Produto adicionado com sucesso",
-            data: { id: req.body.id }
+
+    knex('produtos')
+        .insert(req.body, ['id'])
+        .then((dados) => {
+            if (dados.length > 0) {
+                const id = dados[0].id
+                res.status(201)
+                    .json({
+                        message: "Produto adicionado com sucesso",
+                        data: { id }
+                    })
+            }
+        })
+        .catch((err) => {
+            res.json({ message: `Erro ao adicionar o produto: ${err.message}` })
         })
 })
 
