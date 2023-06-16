@@ -6,10 +6,10 @@ const routerAPI2 = express.Router()
 const knexConfig = require('../knexfile')
 
 
-const produtos = [
-    { id: 1, descricao: "Arroz", preco: "R$ 20,00" },
-    { id: 2, descricao: "Feijao", preco: "R$ 25,00" }
-]
+// const produtos = [
+//     { id: 1, descricao: "Arroz", preco: "R$ 20,00" },
+//     { id: 2, descricao: "Feijao", preco: "R$ 25,00" }
+// ]
 
 // Conexao com o Bnaco
 const knex = require('knex')(knexConfig.staging);
@@ -17,7 +17,7 @@ const knex = require('knex')(knexConfig.staging);
 routerAPI2.get(`/produtos`, (req, res) => {
     knex('produtos')
         .then((dados) => {
-            res.json(produtos)
+            res.json(dados)
         }).catch((err) => {
             res.json({ message: `Erro ao obter produtos: ${err.message}` })
         })
