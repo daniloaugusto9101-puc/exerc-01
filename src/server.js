@@ -3,7 +3,6 @@
 
 const app = require('./app');
 require('dotenv').config() //da acesso as variaveis de ambiente dentro do arquivo .env
-
 const PORT = process.env.PORT || 3333 //recupera porta do arquivo .env 
 
 const END_POINT_V1 = process.env.END_POINT_V1 //recupera end point V1 do arquivo .env 
