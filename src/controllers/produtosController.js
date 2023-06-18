@@ -1,4 +1,3 @@
-const express = require('express')
 
 // Conexao com o Banco
 const knexConfig = require('../models/knexfile')
