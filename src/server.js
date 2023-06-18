@@ -1,4 +1,4 @@
-// URL: API V2
+// URL: API V 2
 // https://app-danilo.herokuapp.com/api/v2/
 
 const app = require('./app');
