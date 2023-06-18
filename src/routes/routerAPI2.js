@@ -1,25 +1,13 @@
-
-// Conexao com o Banco
-const knexConfig = require('../models/knexfile')
-const knex = require('knex')(knexConfig.production);
-
 const express = require('express')
+const produtosController = require('../controllers/produtosController');
 const routerAPI2 = express.Router()
 
-routerAPI2.get(`/produtos`, (req, res) => {
-    knex('produtos')
-        .select()
-        .then((dados) => {
-            res.status(200)
-                .json({
-                    message: "Produtos obtidos com sucesso",
-                    data: dados
-                });
-        })
-        .catch((err) => {
-            res.json({ message: `Erro ao obter os produtos: ${err.message}` });
-        });
-})
+
+routerAPI2.get('/produtos', produtosController.getAll);
+routerAPI2.get('/produtos/:id', produtosController.getById);
+routerAPI2.post('/produtos', produtosController.postProduto);
+routerAPI2.put('/produtos/:id', produtosController.putProduto);
+routerAPI2.delete('/produtos/:id', produtosController.deleteProduto);
 
 
 module.exports = routerAPI2;
