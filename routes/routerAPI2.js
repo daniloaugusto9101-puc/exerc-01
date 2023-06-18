@@ -6,31 +6,51 @@ const routerAPI2 = express.Router()
 const knexConfig = require('../knexfile')
 
 
-// const produtos = [
-//     { id: 1, descricao: "Arroz", preco: "R$ 20,00" },
-//     { id: 2, descricao: "Feijao", preco: "R$ 25,00" }
-// ]
-
 // Conexao com o Bnaco
 const knex = require('knex')(knexConfig.staging);
 
 routerAPI2.get(`/produtos`, (req, res) => {
     knex('produtos')
+        .select()
         .then((dados) => {
-            res.json(dados)
+            res.status(200)
+                .json({
+                    message: "Produtos obtidos com sucesso",
+                    data: dados
+                });
         })
         .catch((err) => {
-            res.json({ message: `Erro ao obter produtos: ${err.message}` })
-        })
-})
+            res.json({ message: `Erro ao obter os produtos: ${err.message}` });
+        });
+});
 
 routerAPI2.get(`/produtos/:id`, (req, res) => {
-    let produto = produtos.find(p => p.id == req.params.id)
-    res.json(produto)
-})
+    const { id } = req.params;
+
+    knex('produtos')
+        .select()
+        .where({ id })
+        .then((dados) => {
+            if (dados.length > 0) {
+                res.status(200)
+                    .json({
+                        message: "Produto obtido com sucesso",
+                        data: dados[0]
+                    });
+            } else {
+                res.status(404)
+                    .json({
+                        message: "Produto não encontrado"
+                    });
+            }
+        })
+        .catch((err) => {
+            res.json({ message: `Erro ao obter o produto: ${err.message}` });
+        });
+});
+
 
 routerAPI2.post(`/produtos`, (req, res) => {
-
     knex('produtos')
         .insert(req.body, ['id'])
         .then((dados) => {
@@ -50,31 +70,42 @@ routerAPI2.post(`/produtos`, (req, res) => {
 
 
 routerAPI2.put(`/produtos/:id`, (req, res) => {
-    let produto = produtos.find(p => p.id == req.params.id)
-    let body = req.body
-    if (produto) {
-        produto.descricao = body.descricao
-        produto.valor = body.valor
-        produto.marca = body.marca
-    }
+    const { id } = req.params;
+    const updatedData = req.body;
 
-    res.send(201)
-        .json({
-            messagem: "Produto adicionado com sucesso",
-            data: { id: req.body.id }
+    knex('produtos')
+        .where({ id })
+        .update(updatedData)
+        .then(() => {
+            res.status(200)
+                .json({
+                    message: "Produto atualizado com sucesso"
+                });
         })
-})
+        .catch((err) => {
+            res.json({ message: `Erro ao atualizar o produto: ${err.message}` });
+        });
+});
+
 
 
 routerAPI2.delete(`/produtos/:id`, (req, res) => {
-    const index = produtos.findIndex(obj => obj.id == req.params.id);
-    if (index !== -1) {
-        produtos.splice(index, 1)
-        res.send('Produto deletado')
-    } else {
-        console.log("Produto nao encontrado nao encotrado");
-    }
-})
+    const { id } = req.params;
+
+    knex('produtos')
+        .where({ id })
+        .del()
+        .then(() => {
+            res.status(200)
+                .json({
+                    message: "Produto removido com sucesso"
+                });
+        })
+        .catch((err) => {
+            res.json({ message: `Erro ao remover o produto: ${err.message}` });
+        });
+});
+
 
 
 module.exports = routerAPI2;
