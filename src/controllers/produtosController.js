@@ -1,9 +1,10 @@
 
 // Conexao com o Banco
 const knexConfig = require('../models/knexfile')
-const knex = require('knex')(knexConfig.production);
+const knex = require('knex')(knexConfig.development);
 
 const getAll = (req, res) => {
+    console.log(req.id, req.roles);
     const produtos = knex('produtos')
         .select()
         .then((dados) => {
@@ -107,5 +108,5 @@ module.exports = {
     getById,
     postProduto,
     putProduto,
-    deleteProduto
+    deleteProduto,
 }
